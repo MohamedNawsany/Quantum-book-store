@@ -1,0 +1,33 @@
+package fawryTaskTwo;
+import java.util.*;
+class QuantumBookstore {
+    private Map<String, Book> inventory = new HashMap<>();
+
+    public void addBook(Book book) {
+        inventory.put(book.getIsbn(), book);
+        System.out.println("Quantum book store: Book added: " + book.title);
+    }
+
+    public Book removeOutdatedBook(int maxAge) {
+        int currentYear = Calendar.getInstance().get(Calendar.YEAR);
+        for (String isbn : new ArrayList<>(inventory.keySet())) {
+            Book b = inventory.get(isbn);
+            if (currentYear - b.getYear() > maxAge) {
+                inventory.remove(isbn);
+                System.out.println("Quantum book store: Removed outdated book: " + b.title);
+                return b;
+            }
+        }
+        return null;
+    }
+
+    public double buyBook(String isbn, int quantity, String email, String address) {
+        Book book = inventory.get(isbn);
+        if (book == null) {
+            throw new IllegalArgumentException("Quantum book store: Book not found");
+        }
+        double total = book.buy(quantity, email, address);
+        System.out.println("Quantum book store: Book bought: " + book.title + " for $" + total);
+        return total;
+    }
+}
